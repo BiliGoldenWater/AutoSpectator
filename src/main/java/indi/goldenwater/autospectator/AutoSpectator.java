@@ -35,6 +35,8 @@ public final class AutoSpectator extends JavaPlugin {
                     for (Player onlinePlayer : onlinePlayers) {
                         if (onlinePlayer.getUniqueId().compareTo(player.getUniqueId()) == 0) continue;
 
+                        if (onlinePlayer.getGameMode().equals(GameMode.SPECTATOR)) continue;
+
                         player.setSpectatorTarget(onlinePlayer);
                         break;
                     }

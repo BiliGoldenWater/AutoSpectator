@@ -3,4 +3,4 @@ version: ${project.version}
 main: indi.goldenwater.autospectator.AutoSpectator
 api-version: 1.15
 authors: [ Golden_Water ]
-description: Auto switch target in spectator mode when lost target.
+description: ${project.description}
