@@ -1,50 +1,46 @@
 package indi.goldenwater.autospectator;
 
-import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.Player;
+import indi.goldenwater.autospectator.utils.ConfigWatchService;
+import indi.goldenwater.autospectator.utils.I18nManager;
+import indi.goldenwater.autospectator.utils.TargetSwitcher;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitRunnable;
-
-import java.util.Collection;
 
 public final class AutoSpectator extends JavaPlugin {
-    BukkitRunnable detector;
+    private static AutoSpectator instance;
+
+    private ConfigWatchService configWatchService = null;
+    private TargetSwitcher detector;
+    private I18nManager i18nManager;
 
     @Override
     public void onEnable() {
         // Plugin startup logic
-        detector = new BukkitRunnable() {
+        instance = this;
+        saveDefaultConfig();
+        this.i18nManager = new I18nManager(getDataFolder(), "lang", "en_us");
+        this.i18nManager.releaseDefaultLangFile(this, "lang", "langList.json", false);
 
-            @Override
-            public void run() {
-                Collection<? extends Player> onlinePlayers = Bukkit.getOnlinePlayers();
-
-                if (onlinePlayers.isEmpty() || onlinePlayers.size() == 1) return;
-
-                for (Player player : onlinePlayers) {
-                    if (!player.getScoreboardTags().contains("autoSpectator")) continue;
-
-                    GameMode gamemode = player.getGameMode();
-                    if (gamemode.compareTo(GameMode.SPECTATOR) != 0) continue;
-
-                    Entity target = player.getSpectatorTarget();
-                    if (target != null) continue;
-
-                    for (Player onlinePlayer : onlinePlayers) {
-                        if (onlinePlayer.getUniqueId().compareTo(player.getUniqueId()) == 0) continue;
-
-                        if (onlinePlayer.getGameMode().equals(GameMode.SPECTATOR)) continue;
-
-                        player.setSpectatorTarget(onlinePlayer);
-                        break;
+        configWatchService = new ConfigWatchService(this);
+        configWatchService.register("fileWatchService",
+                name -> name.endsWith(".yml"),
+                new ConfigWatchService.DoSomeThing() {
+                    @Override
+                    public void reload() {
+                        reloadConfig();
+                        i18nManager.reload();
+                        detector.setConfig(getConfig());
                     }
-                }
-            }
-        };
 
-        detector.runTaskTimer(this, 0, 5);
+                    @Override
+                    public void release() {
+                        saveDefaultConfig();
+                        i18nManager.releaseDefaultLangFile(AutoSpectator.getInstance(), "lang", "langList.json", false);
+                    }
+                });
+
+        detector = new TargetSwitcher();
+        detector.setConfig(getConfig());
+        detector.runTaskTimer(this, 0, getConfig().getLong("settings.detectPeriod"));
 
         getLogger().info("Enabled.");
     }
@@ -55,6 +51,17 @@ public final class AutoSpectator extends JavaPlugin {
         if (detector != null) {
             detector.cancel();
         }
+        if (configWatchService != null) {
+            configWatchService.unregister();
+        }
         getLogger().info("Disabled.");
+    }
+
+    public static AutoSpectator getInstance() {
+        return instance;
+    }
+
+    public I18nManager getI18nManager() {
+        return i18nManager;
     }
 }

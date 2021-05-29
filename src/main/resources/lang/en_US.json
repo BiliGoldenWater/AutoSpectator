@@ -1,0 +1,10 @@
+{
+  "error_noPerm": "§cYou don't have permission.",
+  "error_onlyPlayerCanUse": "§cOnly player can use this command!",
+  "cmd_reload_success": "Config and Languages are reloaded.",
+  "cmd_lang_list": "All available languages: \n    {{languages}}",
+  "cmd_lang_successSet": "Success set language to: {{language}}",
+  "cmd_lang_setFail": "Fail to set language to {{language}}:",
+  "cmd_lang_setFail_doesNotExist": "Language doesn't exist.",
+  "cmd_resetLang_resetFinish": "Success reset all language files."
+}

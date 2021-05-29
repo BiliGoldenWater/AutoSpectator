@@ -1,0 +1,10 @@
+{
+  "error_noPerm": "§c你没有权限.",
+  "error_onlyPlayerCanUse": "§c只有玩家可以使用此命令!",
+  "cmd_reload_success": "已重载配置与语言文件.",
+  "cmd_lang_list": "所有可用语言: \n    {{languages}}",
+  "cmd_lang_successSet": "成功将语言设置为: {{language}}",
+  "cmd_lang_setFail": "尝试将语言设置为 {{language}} 失败:",
+  "cmd_lang_setFail_doesNotExist": "语言不存在.",
+  "cmd_resetLang_resetFinish": "成功重置了所有语言文件."
+}

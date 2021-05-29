@@ -1,6 +1,6 @@
 name: AutoSpectator
 version: ${project.version}
 main: indi.goldenwater.autospectator.AutoSpectator
-api-version: 1.15
+api-version: 1.16
 authors: [ Golden_Water ]
 description: ${project.description}

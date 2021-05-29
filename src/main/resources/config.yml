@@ -1,0 +1,15 @@
+# Monitor config file change/delete and reload/release config file.
+fileWatchService: true
+
+# Plugin function settings.
+settings:
+  # Detect period(tick).
+  detectPeriod: 5
+  # Teleport when too far from target or in different world.
+  teleport:
+    # Enable?
+    enable: true
+    # Teleport trigger distance(distance > this)(block).
+    distance: 64
+    # Delay between teleport and switch target(ticks).
+    switchDelay: 100
