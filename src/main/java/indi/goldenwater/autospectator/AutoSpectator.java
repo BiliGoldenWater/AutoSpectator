@@ -9,7 +9,7 @@ public final class AutoSpectator extends JavaPlugin {
     private static AutoSpectator instance;
 
     private ConfigWatchService configWatchService = null;
-    private TargetSwitcher detector;
+    private TargetSwitcher targetSwitcher;
     private I18nManager i18nManager;
 
     @Override
@@ -17,9 +17,32 @@ public final class AutoSpectator extends JavaPlugin {
         // Plugin startup logic
         instance = this;
         saveDefaultConfig();
+        registerI18nManager();
+
+        registerWatchService();
+        registerTargetSwitcher();
+
+        getLogger().info("Enabled.");
+    }
+
+    @Override
+    public void onDisable() {
+        // Plugin shutdown logic
+        if (targetSwitcher != null) {
+            targetSwitcher.cancel();
+        }
+        if (configWatchService != null) {
+            configWatchService.unregister();
+        }
+        getLogger().info("Disabled.");
+    }
+
+    private void registerI18nManager(){
         this.i18nManager = new I18nManager(getDataFolder(), "lang", "en_us");
         this.i18nManager.releaseDefaultLangFile(this, "lang", "langList.json", false);
+    }
 
+    private void registerWatchService(){
         configWatchService = new ConfigWatchService(this);
         configWatchService.register("fileWatchService",
                 name -> name.endsWith(".yml"),
@@ -28,7 +51,7 @@ public final class AutoSpectator extends JavaPlugin {
                     public void reload() {
                         reloadConfig();
                         i18nManager.reload();
-                        detector.setConfig(getConfig());
+                        targetSwitcher.setConfig(getConfig());
                     }
 
                     @Override
@@ -37,24 +60,12 @@ public final class AutoSpectator extends JavaPlugin {
                         i18nManager.releaseDefaultLangFile(AutoSpectator.getInstance(), "lang", "langList.json", false);
                     }
                 });
-
-        detector = new TargetSwitcher();
-        detector.setConfig(getConfig());
-        detector.runTaskTimer(this, 0, getConfig().getLong("settings.detectPeriod"));
-
-        getLogger().info("Enabled.");
     }
 
-    @Override
-    public void onDisable() {
-        // Plugin shutdown logic
-        if (detector != null) {
-            detector.cancel();
-        }
-        if (configWatchService != null) {
-            configWatchService.unregister();
-        }
-        getLogger().info("Disabled.");
+    private void registerTargetSwitcher(){
+        targetSwitcher = new TargetSwitcher();
+        targetSwitcher.setConfig(getConfig());
+        targetSwitcher.runTaskTimer(this, 0, getConfig().getLong("settings.detectPeriod"));
     }
 
     public static AutoSpectator getInstance() {
