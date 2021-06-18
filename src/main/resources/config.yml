@@ -11,5 +11,5 @@ settings:
     enable: true
     # Teleport trigger distance(distance > this)(block).
     distance: 64
-    # Delay between teleport and switch target(ticks).
+    # Delay between teleport and switch target(ticks(1 tick = 20 seconds)).
     switchDelay: 100
