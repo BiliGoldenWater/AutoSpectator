@@ -3,7 +3,7 @@ fileWatchService: true
 
 # Plugin function settings.
 settings:
-  # Detect period(tick).
+  # Detect period(tick(s)(1 tick = 20 seconds))
   detectPeriod: 5
   # Teleport when too far from target or in different world.
   teleport:
@@ -11,5 +11,5 @@ settings:
     enable: true
     # Teleport trigger distance(distance > this)(block).
     distance: 64
-    # Delay between teleport and switch target(ticks(1 tick = 20 seconds)).
+    # Delay between teleport and switch target(tick(s)(1 tick = 20 seconds)).
     switchDelay: 100
