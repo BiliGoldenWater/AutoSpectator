@@ -65,7 +65,7 @@ public final class AutoSpectator extends JavaPlugin {
     private void registerTargetSwitcher(){
         targetSwitcher = new TargetSwitcher();
         targetSwitcher.setConfig(getConfig());
-        targetSwitcher.runTaskTimer(this, 0, getConfig().getLong("settings.detectPeriod"));
+        targetSwitcher.runTaskTimer(this, 0, getConfig().getLong("settings.detectPeriod", 5));
     }
 
     public static AutoSpectator getInstance() {
