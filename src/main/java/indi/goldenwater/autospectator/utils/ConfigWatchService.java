@@ -33,9 +33,7 @@ public class ConfigWatchService {
                 @Override
                 public void run() {
                     try {
-                        System.out.println("1");
                         while (isRunning && (key = watchService.take()) != null) {
-                            System.out.println("2");
                             for (WatchEvent<?> event : key.pollEvents()) {
                                 if (event.kind().equals(StandardWatchEventKinds.ENTRY_DELETE)) {
                                     if (checkFile.check(event.context().toString())) {
@@ -50,16 +48,13 @@ public class ConfigWatchService {
                                     }
                                 }
                             }
-                            System.out.println("3");
                             key.reset();
                         }
-                        System.out.println("4");
                         try {
                             watchService.close();
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
-                        System.out.println("5");
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     } catch (ClosedWatchServiceException ignored){
